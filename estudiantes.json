@@ -1,0 +1,74 @@
+[
+  {
+    "id": "b1-1",
+    "nombre": "Juan Pablo",
+    "acudiente": "Mamá",
+    "telefono": "573225940033",
+    "barrio": "El Turbai",
+    "ruta": "Bachillerato - Parte 1",
+    "orden": 1,
+    "lat": 4.566,
+    "lng": -75.751,
+    "estado": "pendiente"
+  },
+  {
+    "id": "b1-2",
+    "nombre": "Nicolás Bedoya",
+    "acudiente": "Mamá",
+    "telefono": "573128840559",
+    "barrio": "El Turbai",
+    "ruta": "Bachillerato - Parte 1",
+    "orden": 2,
+    "lat": 4.5664,
+    "lng": -75.7514,
+    "estado": "pendiente"
+  },
+  {
+    "id": "b1-3",
+    "nombre": "Dilan Gañán",
+    "acudiente": "Abuela Teresa",
+    "telefono": "573206342481",
+    "barrio": "El Turbai",
+    "ruta": "Bachillerato - Parte 1",
+    "orden": 3,
+    "lat": 4.5668,
+    "lng": -75.7518,
+    "estado": "pendiente"
+  },
+  {
+    "id": "b2-1",
+    "nombre": "Mateo López",
+    "acudiente": "Mamá Ana",
+    "telefono": "573010000000",
+    "barrio": "Centro",
+    "ruta": "Bachillerato - Parte 2",
+    "orden": 1,
+    "lat": 4.5662,
+    "lng": -75.748,
+    "estado": "pendiente"
+  },
+  {
+    "id": "p1-1",
+    "nombre": "Sofía Ramírez",
+    "acudiente": "Papá Carlos",
+    "telefono": "573010000001",
+    "barrio": "Villa Carolina",
+    "ruta": "Primaria",
+    "orden": 1,
+    "lat": 4.5671,
+    "lng": -75.747,
+    "estado": "pendiente"
+  },
+  {
+    "id": "t1-1",
+    "nombre": "Laura Gómez",
+    "acudiente": "Mamá Diana",
+    "telefono": "573010000002",
+    "barrio": "La Isabela",
+    "ruta": "Transición",
+    "orden": 1,
+    "lat": 4.5681,
+    "lng": -75.746,
+    "estado": "pendiente"
+  }
+]

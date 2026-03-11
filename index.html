@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Ruta Escolar Montenegro</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Ruta escolar</p>
+        <h1>Montenegro</h1>
+      </div>
+      <button id="btnConfigTop" class="icon-btn" title="Configuración">⚙️</button>
+    </header>
+
+    <section class="hero-card">
+      <div class="hero-main">
+        <div>
+          <p class="muted">Ruta activa</p>
+          <h2 id="rutaActivaTexto">Bachillerato - Parte 1</h2>
+        </div>
+        <select id="rutaSelect" class="input select-compact"></select>
+      </div>
+      <div class="stat-row">
+        <article class="stat-card">
+          <span>Actual</span>
+          <strong id="actualNombre">Sin iniciar</strong>
+          <small id="actualBarrio">---</small>
+        </article>
+        <article class="stat-card">
+          <span>Pendientes</span>
+          <strong id="pendientesCount">0</strong>
+          <small>por recoger</small>
+        </article>
+        <article class="stat-card">
+          <span>Canal</span>
+          <strong id="canalActivo">WhatsApp</strong>
+          <small id="backendEstado">Sin probar</small>
+        </article>
+      </div>
+      <div class="quick-actions">
+        <button class="primary" id="btnIniciarRuta">Iniciar ruta</button>
+        <button class="secondary" id="btnSubio">Estudiante subió</button>
+        <button class="secondary" id="btnAvisarActual">Avisar actual</button>
+        <button class="secondary" id="btnAvisarBarrio">Avisar barrio</button>
+      </div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="orden">Orden</button>
+      <button class="tab" data-tab="mensajes">Mensajes</button>
+      <button class="tab" data-tab="ia">IA</button>
+      <button class="tab" data-tab="estudiantes">Estudiantes</button>
+      <button class="tab" data-tab="config">Config</button>
+    </nav>
+
+    <main class="content">
+      <section class="panel active" id="tab-orden">
+        <div class="panel-card">
+          <div class="panel-title-row">
+            <h3>Orden de recogida</h3>
+            <button class="ghost" id="btnRefrescarOrden">Actualizar</button>
+          </div>
+          <div id="ordenLista" class="list-stack"></div>
+        </div>
+
+        <div class="panel-card">
+          <h3>Ubicación</h3>
+          <div class="location-row">
+            <button class="secondary" id="btnGPS">Activar GPS</button>
+            <div>
+              <strong id="gpsEstado">GPS apagado</strong>
+              <small id="gpsDetalle">Sin coordenadas</small>
+            </div>
+          </div>
+          <div id="map"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-mensajes">
+        <div class="panel-card">
+          <div class="panel-title-row">
+            <h3>Mensaje rápido</h3>
+            <select id="tipoMensaje" class="input select-compact"></select>
+          </div>
+          <div class="grid-2">
+            <select id="destinoMensaje" class="input"></select>
+            <select id="tonoMensaje" class="input">
+              <option value="cercano">Tono cercano</option>
+              <option value="formal">Tono formal</option>
+              <option value="breve">Tono breve</option>
+            </select>
+          </div>
+          <textarea id="mensajePreview" class="textarea" placeholder="Aquí aparecerá el mensaje"></textarea>
+          <div class="quick-actions">
+            <button class="secondary" id="btnGenerarMensaje">Generar con IA</button>
+            <button class="primary" id="btnEnviarMensaje">Enviar ahora</button>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <h3>Bandeja WhatsApp</h3>
+          <div class="quick-actions compact-actions">
+            <button class="secondary" id="btnMasivoRuta">Alistamiento de ruta</button>
+            <button class="secondary" id="btnLlegadaColegio">Llegada al colegio</button>
+            <button class="secondary" id="btnProcesarCola">Procesar cola</button>
+          </div>
+          <div id="colaMensajes" class="list-stack"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-ia">
+        <div class="panel-card">
+          <h3>Asistente IA local</h3>
+          <textarea id="preguntaIA" class="textarea" placeholder="Ejemplo: redacta un mensaje amable para avisar retraso de 10 minutos"></textarea>
+          <div class="quick-actions compact-actions">
+            <button class="secondary" id="btnPreguntarIA">Responder</button>
+            <button class="secondary" id="btnUsarRespuestaIA">Usar en bandeja</button>
+          </div>
+          <div id="respuestaIA" class="ia-box">La IA te ayuda a redactar mensajes, resumir el estado de la ruta y preparar avisos masivos.</div>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-estudiantes">
+        <div class="panel-card">
+          <h3>Listado de estudiantes</h3>
+          <div id="estudiantesLista" class="list-stack"></div>
+        </div>
+        <div class="panel-card">
+          <h3>Agregar o editar</h3>
+          <form id="studentForm" class="form-stack">
+            <input type="hidden" id="studentId">
+            <input id="studentNombre" class="input" placeholder="Nombre del estudiante" required>
+            <input id="studentAcudiente" class="input" placeholder="Acudiente" required>
+            <input id="studentTelefono" class="input" placeholder="Celular en formato 57..." required>
+            <select id="studentRuta" class="input" required></select>
+            <select id="studentBarrio" class="input" required></select>
+            <input id="studentOrden" type="number" min="1" class="input" placeholder="Orden de recogida" required>
+            <div class="grid-2">
+              <input id="studentLat" class="input" placeholder="Latitud opcional">
+              <input id="studentLng" class="input" placeholder="Longitud opcional">
+            </div>
+            <div class="quick-actions compact-actions">
+              <button class="primary" type="submit">Guardar</button>
+              <button class="secondary" type="button" id="btnLimpiarForm">Limpiar</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-config">
+        <div class="panel-card">
+          <h3>Configuración de envío</h3>
+          <label class="label">Modo</label>
+          <select id="modoEnvio" class="input">
+            <option value="open_whatsapp">Abrir WhatsApp</option>
+            <option value="business">WhatsApp Business</option>
+            <option value="demo">Demo</option>
+          </select>
+          <label class="label">URL backend</label>
+          <input id="backendUrl" class="input" placeholder="https://tu-worker.workers.dev">
+          <label class="label">API key pública</label>
+          <input id="apiKey" class="input" placeholder="Clave para tu worker">
+          <div class="quick-actions compact-actions">
+            <button class="secondary" id="btnGuardarConfig">Guardar</button>
+            <button class="secondary" id="btnProbarBackend">Probar conexión</button>
+          </div>
+          <small class="helper">En modo Business la app envía al backend. En modo WhatsApp abre la app con el mensaje listo.</small>
+        </div>
+
+        <div class="panel-card">
+          <h3>Bitácora</h3>
+          <div id="bitacora" class="log-box"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="ia.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
